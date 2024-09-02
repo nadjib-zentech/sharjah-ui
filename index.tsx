@@ -1,90 +1,67 @@
+import { useAtom } from "jotai";
+import { currentBenefitsSlideAtom } from "../../state/atoms";
 import style from "./style.module.css";
-import event1 from "../../assets/events/1.png";
-import event2 from "../../assets/events/2.png";
-import event3 from "../../assets/events/3.png";
-import defaultEvent from "../../assets/events/default-event.png"
-import plume from "../../assets/plume.png"
-import { useState } from "react";
+import benefits1 from "../../assets/benefits/1.png";
+import benefits2 from "../../assets/benefits/2.png";
+import benefits3 from "../../assets/benefits/3.png";
+import benefits4 from "../../assets/benefits/4.png";
 
-const Event = ({ title, desc, image, index }: any) => {
-
-  const [ currentImg, setCurrentImg ] = useState (image);
-
-  const handleMouseIn = () => {
-    setCurrentImg (defaultEvent);
-  } 
-
-  const handleMouseOut = () => {
-    setCurrentImg (image);
-  } 
+const Slide = ({ image }: any) => {
 
   return (
-    <div className={style.event}>
-      <div className={style.eventText}>
-        <span>{title}</span>
-        <p>{desc}</p>
+    <div className={style.slide}>
+      <div className={style.content}>
+        <span>EPA Benefits</span>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad miniminut veniam</p>
+        <p>Lorem ipsum dolor sit amet, tempour consectetur adipiscing elit.  Sed do eiusmod tempor incid</p>
       </div>
-      <div className={style.dot}>{index + 1}</div>
       <div className={style.image}>
-        <img src={currentImg} onMouseEnter={handleMouseIn} onMouseLeave={handleMouseOut} />
+        <img src={image} alt="" />
       </div>
     </div>
   );
+
 }
 
-const Events = () => {
+const Benefits = () => {
 
-  const events = [
-    {
-      title: "UAE Books Event",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore",
-      image: event1
-    },
-    {
-      title: "UAE Books Event",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore",
-      image: event2
-    },
-    {
-      title: "UAE Books Event",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore",
-      image: event3
-    },
-    {
-      title: "UAE Books Event",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore",
-      image: event1
-    },
-    {
-      title: "UAE Books Event",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore",
-      image: event2
-    },
+  const [ currentSlide, setCurrentSlide] = useAtom (currentBenefitsSlideAtom);
+
+  const SLIDES = [
+    { image: benefits1 },
+    { image: benefits2 },
+    { image: benefits3 },
+    { image: benefits1 },
+    { image: benefits4 },
   ];
 
+  // useEffect (() => {
+
+  //   const t = setInterval (() => {
+
+  //     setCurrentHeroSlide ((prev) => prev == SLIDES.length - 1 ? 0 : prev + 1);
+
+  //   }, 3000);
+
+  //   return () => {
+  //     clearInterval (t);
+  //   }
+
+  // }, [currentHeroSlide])
+
   return (
-    <div className={style.events}>
-      <div className={style.text}>
-        <div className={style.title}>
-          Events Calendar
-        </div>
-        <div className={style.desc}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam. Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Sed do eiusmod tempor incididunt ut labore et dolor
-        </div>
+    <div className={style.benefits}>
+      <div className={style.slidesRow} style={{ transform: `translateY(-${currentSlide * 100}vh)` }}>
+        { SLIDES.map((slide, i) => <Slide key={i} image={slide.image} />) }
       </div>
-      <div className={style.eventList}>
-        <div className={style.line}>
-          <div className={style.progress}>
-            <img src={plume} />
-          </div>
-        </div>
-        <div className={style.wrapper}>
-          { events.map ((e, index) => <Event title={e.title} desc={e.desc} image={e.image} index={index} />) }
-        </div>
+      <div className={style.backgroundImage}></div>
+      <div className={style.sliderControllers}>
+        <ul>
+          { SLIDES.map((slide, i) => <li key={i} id={`${ i == currentSlide ? style.active : null}`} onClick={() => setCurrentSlide (i)}></li>) }
+        </ul>
       </div>
     </div>
-  );
-
+  )
 }
 
-export default Events;
+export default Benefits;
